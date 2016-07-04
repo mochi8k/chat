@@ -2,7 +2,7 @@ package main
 
 import (
 	"log"
-  "net/http"
+	"net/http"
 )
 
 func main() {
@@ -20,7 +20,7 @@ func main() {
 	})
 
 	// start Web Server
-  if err := http.ListenAndServe(":8000", nil); err != nil {
-    log.Fatal("ListenAndServe:", err)
-  }
+	if err := http.ListenAndServe(":8000", nil); err != nil {
+		log.Fatal("ListenAndServe:", err)
+	}
 }
