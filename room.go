@@ -13,6 +13,19 @@ type room struct {
 	clients map[*client]bool
 }
 
+const (
+	socketBufferSize  = 1024
+	messageBufferSize = 256
+)
+
+var upgrader = &websocket.Upgrader{
+	ReadBufferSize:  socketBufferSize,
+	WriteBufferSize: socketBufferSize}
+
+func (r *room) ServeHttp(w http.ResponseWriter, req *http.Request) {
+
+}
+
 func (r *room) run() {
 	for {
 		select {
