@@ -1,6 +1,9 @@
 package trace
 
-import "io"
+import (
+	"fmt"
+	"io"
+)
 
 // コード内のフローを記録できるオブジェクトを表すインターフェース
 type Tracer interface {
@@ -8,5 +11,14 @@ type Tracer interface {
 }
 
 func New(w io.Writer) Tracer {
-  return nil
+	return &tracer{out: w}
+}
+
+type tracer struct {
+	out io.Writer
+}
+
+func (t *tracer) Trace(a ...interface{}) {
+	t.out.Write([]byte(fmt.Sprint(a...)))
+	t.out.Write([]byte("\n"))
 }
