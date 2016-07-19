@@ -8,7 +8,7 @@ import (
 type client struct {
 	socket *websocket.Conn
 
-	// send message channel
+	// send message channel.
 	send chan []byte
 
 	// chat room
