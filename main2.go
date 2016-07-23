@@ -6,10 +6,10 @@ import (
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("Hello World")
+	fmt.Fprintln(w, "Hello Go!")
 }
 
-func main2() {
+func main() {
 	http.HandleFunc("/", handler)
 	http.ListenAndServe(":8080", nil)
 }
