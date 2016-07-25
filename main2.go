@@ -1,16 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"html/template"
 	"net/http"
-	"path/filepath"
 )
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	tmpl, err := template.ParseFiles(filepath.Join("templates", "chat.html"))
+	tmpl, err := template.ParseFiles("templates/chat.html")
 	if err != nil {
-		fmt.Println(err)
 		panic(err)
 	}
 
@@ -22,7 +19,6 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	fmt.Println("main")
 	http.HandleFunc("/", handler)
 	http.ListenAndServe(":8080", nil)
 }
