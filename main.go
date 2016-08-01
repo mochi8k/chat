@@ -41,18 +41,18 @@ func main() {
 	gomniauth.SetSecurityKey("tan security key")
 	gomniauth.WithProviders(
 		facebook.New(
-			"1659131477747431",
-			"05d8695a82578f5bdb4e5bc58893d007",
+			"clientID",
+			"clientSecret",
 			"http://localhost:8080/auth/callback/facebook",
 		),
 		github.New(
-			"25799018a8946414a78b",
-			"978387a957b2c4571a5a002333bb6c7405d5c385",
+			"clientID",
+			"clientSecret",
 			"http://localhost:8080/auth/callback/github",
 		),
 		google.New(
-			"219682017207-pa5443eapqatgbd6j3klpg7eutfij626.apps.googleusercontent.com",
-			"FwDuL2xoeTCJxpi6uyXmQKgK",
+			"clientID",
+			"clientSecret",
 			"http://localhost:8080/auth/callback/google",
 		),
 	)
