@@ -1,19 +1,19 @@
 package main
 
 type developer struct {
-	Name         string `json:"name"`
-	ClientID     string `json:"clientID"`
-	ClientSecret string `json:"clientSecret"`
+	name         string `json:"name"`
+	clientID     string `json:"clientID"`
+	clientSecret string `json:"clientSecret"`
 }
 
 func (d *developer) getName() string {
-	return d.Name
+	return d.name
 }
 
 func (d *developer) getClientID() string {
-	return d.ClientID
+	return d.clientID
 }
 
 func (d *developer) getClientSecret() string {
-	return d.ClientSecret
+	return d.clientSecret
 }
