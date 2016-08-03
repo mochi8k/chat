@@ -1,19 +1,19 @@
 package main
 
-type developer struct {
+type provider struct {
 	Name         string `json:"name"`
 	ClientID     string `json:"clientID"`
 	ClientSecret string `json:"clientSecret"`
 }
 
-func (d *developer) getName() string {
+func (d *provider) getName() string {
 	return d.Name
 }
 
-func (d *developer) getClientID() string {
+func (d *provider) getClientID() string {
 	return d.ClientID
 }
 
-func (d *developer) getClientSecret() string {
+func (d *provider) getClientSecret() string {
 	return d.ClientSecret
 }
