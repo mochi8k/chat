@@ -1,8 +1,10 @@
 package main
 
 import (
+	"encoding/json"
 	"flag"
 	"html/template"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -31,6 +33,30 @@ func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	t.templ.Execute(w, r)
 }
 
+func readProviders() func(name string) (string, string, string) {
+	file, err := ioutil.ReadFile("./fixtures/provider.json")
+
+	if err != nil {
+		log.Fatal("JSON error")
+	}
+
+	var providers []provider
+	json.Unmarshal(file, &providers)
+
+	return func(name string) (string, string, string) {
+		var id, secret, redirect string
+		for _, provider := range providers {
+			if provider.getName() == name {
+				id = provider.getClientID()
+				secret = provider.getClientSecret()
+				redirect = "http://localhost:8080/auth/callback/" + name
+			}
+		}
+		return id, secret, redirect
+	}
+
+}
+
 func main() {
 	var addr = flag.String("addr", ":8080", "アプリのドレス")
 
@@ -39,22 +65,12 @@ func main() {
 
 	// set up gomniauth
 	gomniauth.SetSecurityKey("tan security key")
+	findProvider := readProviders()
+
 	gomniauth.WithProviders(
-		facebook.New(
-			"clientID",
-			"clientSecret",
-			"http://localhost:8080/auth/callback/facebook",
-		),
-		github.New(
-			"clientID",
-			"clientSecret",
-			"http://localhost:8080/auth/callback/github",
-		),
-		google.New(
-			"clientID",
-			"clientSecret",
-			"http://localhost:8080/auth/callback/google",
-		),
+		facebook.New(findProvider("facebook")),
+		github.New(findProvider("github")),
+		google.New(findProvider("google")),
 	)
 
 	r := newRoom()
