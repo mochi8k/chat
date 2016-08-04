@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/stretchr/gomniauth"
+	"github.com/stretchr/objx"
 )
 
 type authHandler struct {
@@ -54,6 +55,39 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		}
 
 		w.Header().Set("Location", loginUrl)
+		w.WriteHeader(http.StatusTemporaryRedirect)
+	case "callback":
+
+		// 認証プロバイダーの取得
+		provider, err := gomniauth.Provider(provider)
+		if err != nil {
+			log.Fatalln("認証プロバイダーの取得に失敗:", provider, "-", err)
+		}
+
+		// 認証
+		creds, err := provider.CompleteAuth(objx.MustFromURLQuery(r.URL.RawQuery))
+		if err != nil {
+			log.Fatalln("認証を完了できませんでした:", provider, "-", err)
+		}
+
+		// ユーザーの取得
+		user, err := provider.GetUser(creds)
+		if err != nil {
+			log.Fatalln("ユーザーの取得に失敗しました:", provider, "-", err)
+		}
+
+		// クッキー生成
+		authCookieValue := objx.New(map[string]interface{}{
+			"name": user.Name(),
+		}).MustBase64()
+
+		http.SetCookie(w, &http.Cookie{
+			Name:  "auth",
+			Value: authCookieValue,
+			Path:  "/",
+		})
+
+		w.Header()["Location"] = []string{"/chat"}
 		w.WriteHeader(http.StatusTemporaryRedirect)
 
 	default:
