@@ -10,7 +10,7 @@ import (
 
 type room struct {
 	// 他のクライアントに転送するためのメッセージを保持するチャネル
-	forward chan []byte
+	forward chan *message
 
 	// for joiner
 	join chan *client
@@ -25,7 +25,7 @@ type room struct {
 
 func newRoom() *room {
 	return &room{
-		forward: make(chan []byte),
+		forward: make(chan *message),
 		join:    make(chan *client),
 		leave:   make(chan *client),
 		clients: make(map[*client]bool),
@@ -51,7 +51,7 @@ func (r *room) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 
 	client := &client{
 		socket: socket,
-		send:   make(chan []byte, messageBufferSize),
+		send:   make(chan *message, messageBufferSize),
 		room:   r,
 	}
 
@@ -80,7 +80,7 @@ func (r *room) run() {
 			r.tracer.Trace("クライアントが退室しました")
 
 		case msg := <-r.forward:
-			r.tracer.Trace("メッセージを受信しました: ", string(msg))
+			r.tracer.Trace("メッセージを受信しました: ", msg.Message)
 			// 全てのクライアントにメッセージを転送
 			for client := range r.clients {
 				select {

@@ -1,6 +1,8 @@
 package main
 
 import (
+	"time"
+
 	"github.com/gorilla/websocket"
 )
 
@@ -9,10 +11,13 @@ type client struct {
 	socket *websocket.Conn
 
 	// send message channel.
-	send chan []byte
+	send chan *message
 
 	// chat room
 	room *room
+
+	// ユーザー情報
+	userData map[string]interface{}
 }
 
 func (c *client) read() {
@@ -20,8 +25,8 @@ func (c *client) read() {
 		var msg *message
 		if err := c.socket.ReadJSON(&msg); err == nil {
 			msg.When = time.Now()
-			msg.Name.c.userData["name"].(string)
-			c.room.forward <-msgLLL
+			msg.Name = c.userData["name"].(string)
+			c.room.forward <- msg
 		} else {
 			break
 		}
