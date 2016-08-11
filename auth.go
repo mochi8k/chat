@@ -7,6 +7,7 @@ import (
 	"strings"
 
 	"github.com/stretchr/gomniauth"
+	"github.com/stretchr/gomniauth/common"
 	"github.com/stretchr/objx"
 )
 
@@ -32,6 +33,12 @@ func MustAuth(handler http.Handler) http.Handler {
 	return &authHandler{next: handler}
 }
 
+func errorChecker(err interface{}, provider common.Provider, message string) {
+	if err != nil {
+		log.Fatalln(message, provider, "-", err)
+	}
+}
+
 // loginHandlerはサードパーティへのログインの処理を受け持つ.
 // パスの形式: /auth/{action}/{provider}
 func loginHandler(w http.ResponseWriter, r *http.Request) {
@@ -43,16 +50,10 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 	switch action {
 	case "login":
 		provider, err := gomniauth.Provider(provider)
-
-		if err != nil {
-			log.Fatalln("認証プロバイダーの取得に失敗:", provider, "-", err)
-		}
+		errorChecker(err, provider, "認証プロバイダーの取得に失敗:")
 
 		loginUrl, err := provider.GetBeginAuthURL(nil, nil)
-
-		if err != nil {
-			log.Fatalln("GetBeginAuthURLの呼び出し中にエラーが発生:", provider, "-", err)
-		}
+		errorChecker(err, provider, "GetBeginAuthURLの呼び出し中にエラーが発生:")
 
 		w.Header().Set("Location", loginUrl)
 		w.WriteHeader(http.StatusTemporaryRedirect)
@@ -60,21 +61,15 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 
 		// 認証プロバイダーの取得
 		provider, err := gomniauth.Provider(provider)
-		if err != nil {
-			log.Fatalln("認証プロバイダーの取得に失敗:", provider, "-", err)
-		}
+		errorChecker(err, provider, "認証プロバイダーの取得に失敗:")
 
 		// 認証
 		creds, err := provider.CompleteAuth(objx.MustFromURLQuery(r.URL.RawQuery))
-		if err != nil {
-			log.Fatalln("認証を完了できませんでした:", provider, "-", err)
-		}
+		errorChecker(err, provider, "認証を完了できませんでした:")
 
 		// ユーザーの取得
 		user, err := provider.GetUser(creds)
-		if err != nil {
-			log.Fatalln("ユーザーの取得に失敗しました:", provider, "-", err)
-		}
+		errorChecker(err, provider, "ユーザーの取得に失敗しました:")
 
 		// クッキー生成
 		authCookieValue := objx.New(map[string]interface{}{
