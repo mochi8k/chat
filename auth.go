@@ -35,7 +35,7 @@ func MustAuth(handler http.Handler) http.Handler {
 	return &authHandler{next: handler}
 }
 
-func errorChecker(err interface{}, provider common.Provider, message string) {
+func errorChecker(err error, provider common.Provider, message string) {
 	if err != nil {
 		log.Fatalln(message, provider, "-", err)
 	}
