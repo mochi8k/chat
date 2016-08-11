@@ -39,16 +39,23 @@
           alert('WebSocket接続が行われていません。')
         }
 
-        socket.send(messageValue);
+        socket.send(JSON.stringify({Message: messageValue}))
         messageBox.val('');
       });
 
       socket = new WebSocket("ws://{{.Host}}/room");
       socket.onclose = function() {
-        alert("接続が終了しました。");
+        console.log("接続が終了しました。");
       }
       socket.onmessage = function(e) {
-        messages.append($("<li>").text(e.data));
+        console.log(e.data)
+        var message = JSON.parse(e.data);
+        messages.append(
+          $('<li>').append(
+            $('<strong>').text(message.Name + ': '),
+            $('<span>').text(message.Message)
+          )
+        );
       }
 
     })
