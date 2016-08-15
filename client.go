@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/gorilla/websocket"
@@ -27,6 +28,7 @@ func (c *client) read() {
 			msg.When = time.Now()
 			msg.Name = c.userData["name"].(string)
 			msg.AvatarURL, _ = c.room.avatar.GetAvatarURL(c)
+			fmt.Println(msg.AvatarURL)
 			c.room.forward <- msg
 		} else {
 			break
