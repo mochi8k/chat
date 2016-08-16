@@ -1,7 +1,9 @@
 package main
 
 import (
+	"crypto/md5"
 	"fmt"
+	"io"
 	"log"
 	"net/http"
 	"strings"
@@ -75,6 +77,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 
 		// クッキー生成
 		authCookieValue := objx.New(map[string]interface{}{
+			"userid":     createUserId(user.Name()),
 			"name":       user.Name(),
 			"avatar_url": user.AvatarURL(),
 			"email":      user.Email(),
@@ -105,4 +108,10 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 	})
 	w.Header()["Location"] = []string{"/chat"}
 	w.WriteHeader(http.StatusTemporaryRedirect)
+}
+
+func createUserId(userName string) string {
+	m := md5.New()
+	io.WriteString(m, strings.ToLower(userName))
+	return fmt.Sprintf("%x", m.Sum(nil))
 }
