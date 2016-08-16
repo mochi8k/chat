@@ -87,11 +87,14 @@ func main() {
 	// r := newRoom(UseAuthAvatar)
 	r.tracer = trace.New(os.Stdout)
 
+	// handle URI
 	http.Handle("/chat", MustAuth(&templateHandler{filename: "chat.html"}))
 	http.Handle("/login", &templateHandler{filename: "login.html"})
 	http.HandleFunc("/auth/", loginHandler)
 	http.HandleFunc("/logout", logoutHandler)
 	http.Handle("/room", r)
+	http.Handle("/upload", &templateHandler{filename: "upload.html"})
+
 	go r.run()
 
 	log.Println("Webサーバーを開始します。ポート: ", *addr)
