@@ -72,6 +72,7 @@ func main() {
 	// フラグを解釈
 	flag.Parse()
 
+	// TODO: gominiauthの処理はauth.goに以降すべき?
 	// set up gomniauth
 	gomniauth.SetSecurityKey("tan security key")
 	findProvider := readProviders()
