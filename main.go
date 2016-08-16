@@ -67,7 +67,7 @@ func readProviders() func(name string) (string, string, string) {
 }
 
 func main() {
-	var addr = flag.String("addr", ":8080", "アプリのドレス")
+	var addr = flag.String("addr", ":8080", "アプリのアドレス")
 
 	// フラグを解釈
 	flag.Parse()
