@@ -1,6 +1,10 @@
 package main
 
-import "errors"
+import (
+	"errors"
+	"io/ioutil"
+	"path/filepath"
+)
 
 var ErrNoAvatarURL = errors.New("chat: アバターを取得できません.")
 
@@ -46,7 +50,17 @@ var UseFileSystemAvatar FileSystemAvatar
 func (_ FileSystemAvatar) GetAvatarURL(c *client) (string, error) {
 	if userid, ok := c.userData["userid"]; ok {
 		if useridStr, ok := userid.(string); ok {
-			return "/avatars/" + useridStr + ".jpg", nil
+			if files, err := ioutil.ReadDir("avatars"); err == nil {
+				for _, file := range files {
+					if file.IsDir() {
+						continue
+					}
+					match, _ := filepath.Match(useridStr+"*", file.Name())
+					if match {
+						return "/avatars/" + file.Name(), nil
+					}
+				}
+			}
 		}
 	}
 
