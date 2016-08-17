@@ -13,7 +13,7 @@ func TestAuthAvatar(t *testing.T) {
 	var authAvatar AuthAvatar
 
 	testUser := &gomniauthtest.TestUser{}
-	testUser.On("getAvatarURL").Return("", ErrNoAvatarURL)
+	testUser.On("AvatarURL").Return("", ErrNoAvatarURL)
 	testChatUser := &chatUser{User: testUser}
 	url, err := authAvatar.GetAvatarURL(testChatUser)
 
@@ -22,10 +22,10 @@ func TestAuthAvatar(t *testing.T) {
 	}
 
 	testUrl := "http://url-to-avatar"
-	testUser := &gomniauthtest.TestUser{}
+	testUser = &gomniauthtest.TestUser{}
 	testChatUser.User = testUser
-	testUser.On("getAvatarURL").Return(testUrl, nil)
-	url, err := authAvatar.GetAvatarURL(testChatUser)
+	testUser.On("AvatarURL").Return(testUrl, nil)
+	url, err = authAvatar.GetAvatarURL(testChatUser)
 
 	if err != nil {
 		t.Error("値が存在する場合、エラーを返却すべきではありません.")
