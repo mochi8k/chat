@@ -9,9 +9,23 @@ import (
 	"strings"
 
 	"github.com/stretchr/gomniauth"
-	"github.com/stretchr/gomniauth/common"
+	gomniauthcommon "github.com/stretchr/gomniauth/common"
 	"github.com/stretchr/objx"
 )
+
+type ChatUser interface {
+	getUniqueID() string
+	getAvatarURL() string
+}
+
+type chatUser struct {
+	gomniauthcommon.User
+	uniqueID string
+}
+
+func (u chatUser) aetUniqueID() string {
+	return u.uniqueID
+}
 
 type authHandler struct {
 	next http.Handler
@@ -37,7 +51,7 @@ func MustAuth(handler http.Handler) http.Handler {
 	return &authHandler{next: handler}
 }
 
-func errorChecker(err error, provider common.Provider, message string) {
+func errorChecker(err error, provider gomniauthcommon.Provider, message string) {
 	if err != nil {
 		log.Fatalln(message, provider, "-", err)
 	}
