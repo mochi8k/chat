@@ -83,7 +83,8 @@ func main() {
 		google.New(findProvider("google")),
 	)
 
-	r := newRoom(UseGravatar)
+	r := newRoom(UseFileSystemAvatar)
+	// r := newRoom(UseGravatar)
 	// r := newRoom(UseAuthAvatar)
 	r.tracer = trace.New(os.Stdout)
 
