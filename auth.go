@@ -15,7 +15,7 @@ import (
 
 type ChatUser interface {
 	getUniqueID() string
-	getAvatarURL() string
+	AvatarURL() string
 }
 
 type chatUser struct {
@@ -23,7 +23,7 @@ type chatUser struct {
 	uniqueID string
 }
 
-func (u chatUser) aetUniqueID() string {
+func (u chatUser) getUniqueID() string {
 	return u.uniqueID
 }
 
@@ -89,12 +89,16 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		user, err := provider.GetUser(creds)
 		errorChecker(err, provider, "ユーザーの取得に失敗しました:")
 
+		chatUser := &chatUser{User: user}
+		chatUser.uniqueID = createUserId(user.Name())
+		avatarURL, err := avatars.GetAvatarURL(chatUser)
+		errorChecker(err, provider, "URLの取得に失敗しました:")
+
 		// クッキー生成
 		authCookieValue := objx.New(map[string]interface{}{
-			"userid":     createUserId(user.Name()),
+			"userid":     chatUser.uniqueID,
 			"name":       user.Name(),
-			"avatar_url": user.AvatarURL(),
-			"email":      user.Email(),
+			"avatar_url": avatarURL,
 		}).MustBase64()
 
 		http.SetCookie(w, &http.Cookie{

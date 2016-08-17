@@ -22,7 +22,7 @@ type AuthAvatar struct{}
 var UseAuthAvatar AuthAvatar
 
 func (_ AuthAvatar) GetAvatarURL(u ChatUser) (string, error) {
-	url := u.getAvatarURL()
+	url := u.AvatarURL()
 	if url == "" {
 		return "", ErrNoAvatarURL
 	}
