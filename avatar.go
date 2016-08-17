@@ -42,15 +42,18 @@ type FileSystemAvatar struct{}
 var UseFileSystemAvatar FileSystemAvatar
 
 func (_ FileSystemAvatar) GetAvatarURL(u ChatUser) (string, error) {
-	if files, err := ioutil.ReadDir("avatars"); err == nil {
-		for _, file := range files {
-			if file.IsDir() {
-				continue
-			}
-			match, _ := filepath.Match(u.getUniqueID()+"*", file.Name())
-			if match {
-				return "/avatars/" + file.Name(), nil
-			}
+	files, err := ioutil.ReadDir("avatars")
+	if err != nil {
+		return "", ErrNoAvatarURL
+	}
+
+	for _, file := range files {
+		if file.IsDir() {
+			continue
+		}
+		match, _ := filepath.Match(u.getUniqueID()+"*", file.Name())
+		if match {
+			return "/avatars/" + file.Name(), nil
 		}
 	}
 
