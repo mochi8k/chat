@@ -56,9 +56,6 @@ func (r *room) ServeHTTP(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	log.Println(authCookie.Value)
-	log.Println(objx.MustFromBase64(authCookie.Value))
-
 	client := &client{
 		socket:   socket,
 		send:     make(chan *message, messageBufferSize),
