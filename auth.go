@@ -70,10 +70,10 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		provider, err := gomniauth.Provider(provider)
 		errorChecker(err, provider, "認証プロバイダーの取得に失敗:")
 
-		loginUrl, err := provider.GetBeginAuthURL(nil, nil)
+		loginURL, err := provider.GetBeginAuthURL(nil, nil)
 		errorChecker(err, provider, "GetBeginAuthURLの呼び出し中にエラーが発生:")
 
-		w.Header().Set("Location", loginUrl)
+		w.Header().Set("Location", loginURL)
 		w.WriteHeader(http.StatusTemporaryRedirect)
 	case "callback":
 
@@ -90,7 +90,7 @@ func loginHandler(w http.ResponseWriter, r *http.Request) {
 		errorChecker(err, provider, "ユーザーの取得に失敗しました:")
 
 		chatUser := &chatUser{User: user}
-		chatUser.uniqueID = createUserId(user.Name())
+		chatUser.uniqueID = createUserID(user.Name())
 		avatarURL, err := avatars.GetAvatarURL(chatUser)
 		errorChecker(err, provider, "URLの取得に失敗しました:")
 
@@ -128,7 +128,7 @@ func logoutHandler(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusTemporaryRedirect)
 }
 
-func createUserId(userName string) string {
+func createUserID(userName string) string {
 	m := md5.New()
 	io.WriteString(m, strings.ToLower(userName))
 	return fmt.Sprintf("%x", m.Sum(nil))
