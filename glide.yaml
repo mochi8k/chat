@@ -1,0 +1,11 @@
+package: github.com/mochi8k/chat
+import:
+- package: github.com/gorilla/websocket
+  version: v1.0.0
+- package: github.com/stretchr/gomniauth
+  subpackages:
+  - common
+  - providers/facebook
+  - providers/github
+  - providers/google
+- package: github.com/stretchr/objx
