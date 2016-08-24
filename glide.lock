@@ -1,0 +1,59 @@
+hash: c605f18dca70681bb529c10199aca3788584a8899949787e6b566fc309c85b72
+updated: 2016-08-20T01:39:45.111533865+09:00
+imports:
+- name: github.com/clbanning/x2j
+  version: f6421fb8583d19dfa0846d81e33a672addd7beeb
+- name: github.com/davecgh/go-spew
+  version: 5215b55f46b2b919f50a1df0eaa5886afe4e3b3d
+  subpackages:
+  - spew
+- name: github.com/gorilla/websocket
+  version: 1f512fc3f05332ba7117626cdfb4e07474e58e60
+- name: github.com/pmezard/go-difflib
+  version: d8ed2627bdf02c080bf22230dbb337003b7aba2d
+  subpackages:
+  - difflib
+- name: github.com/stretchr/codecs
+  version: 8e29b38960a541ed1264b001dcb21701283c590d
+  subpackages:
+  - services
+  - bson
+  - constants
+  - csv
+  - json
+  - jsonp
+  - msgpack
+  - xml
+- name: github.com/stretchr/gomniauth
+  version: 4ffc30f1926ae4c7ba1a682f005ebb047ef551e4
+  subpackages:
+  - common
+  - providers/facebook
+  - providers/github
+  - providers/google
+  - test
+  - oauth2
+- name: github.com/stretchr/objx
+  version: 1a9d0bb9f541897e62256577b352fdbc1fb4fd94
+- name: github.com/stretchr/signature
+  version: 168b2a1e1b562bf381d47471e31f5979a2a51cd5
+- name: github.com/stretchr/stew
+  version: 80ef0842b48b329a6120607c817a85aff5a2ec71
+  subpackages:
+  - strings
+- name: github.com/stretchr/testify
+  version: d77da356e56a7428ad25149ca77381849a6a5232
+  subpackages:
+  - mock
+  - assert
+- name: github.com/stretchr/tracer
+  version: 66d3696bba973e1697f7d68413b3f19c6d6e2a7c
+- name: github.com/ugorji/go
+  version: 4a1cb5252a6951f715a85d0e4be334c2a2dbf2a2
+  subpackages:
+  - codec
+- name: labix.org/v2/mgo
+  version: "287"
+  subpackages:
+  - bson
+testImports: []
