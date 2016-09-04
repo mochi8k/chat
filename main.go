@@ -48,6 +48,17 @@ func (t *templateHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	t.templ.Execute(w, data)
 }
 
+/*
+	JSONファイルを読み込み、プロバイダー情報を取得する関数を返却する.
+	returns:
+		func: 指定されたプロバイダー名のプロバイダー情報を返却する.
+			params:
+				name: プロバイダー名
+			returns:
+				string: clientID
+				string: clientSecret
+				string: リダイレクトURI
+*/
 func readProviders() func(name string) (string, string, string) {
 	file, err := ioutil.ReadFile("./fixtures/provider.json")
 
